@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63d97cb1cfb3f1b499c24763afa54873, type: 3}
+  m_Name: CityMesh
+  m_EditorClassIdentifier: 
+  _mapId: mapbox.mapbox-streets-v7
+  Visualizers:
+  - {fileID: 11400000, guid: 099fe918954a6b349ae5f655f611498e, type: 2}
+  - {fileID: 11400000, guid: 8738afbaffc2402429a9fbe41f3f7c22, type: 2}
+  - {fileID: 11400000, guid: 0b8dc085b488e1b46be7da4d5f63f425, type: 2}
+  - {fileID: 11400000, guid: def0e06ff96dbdf41bdcffb6befc75c0, type: 2}
