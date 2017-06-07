@@ -12,6 +12,7 @@ public class CameraController : MonoBehaviour
     public float DistanceMin = 3f;
     public float DistanceMax = 10f;
     public float DistanceSmooth = 0.05f;
+    public float DistanceResumeSmooth = 1f;
 
     public float x_MouseSensitivity = 5f;
     public float y_MouseSensitivity = 5f;
@@ -20,6 +21,8 @@ public class CameraController : MonoBehaviour
     public float Y_Smooth = 0.1f;
     public float y_minLimit = -40f;
     public float y_maxLimit = 80f;
+    public float OcclusionDistanceStep = 0.5f;
+    public int MaxOcclusionChecks = 10;
 
 
     private float mouseX = 0f;
@@ -32,6 +35,8 @@ public class CameraController : MonoBehaviour
     private float desiredDistance = 0f;
     private Vector3 position = Vector3.zero;
     private Vector3 desiredPosition = Vector3.zero;
+    private float distanceSmooth = 0f;
+    private float preOccludedDistance = 0;
 	
 	void Awake()
     {
@@ -51,7 +56,15 @@ public class CameraController : MonoBehaviour
             return;
 
         HandlePlayerInput();
-        CalculateDesiredPosition();
+
+        var count = 0;
+        do
+        {
+            CalculateDesiredPosition();
+            count++;
+        } while (CheckIfOccluded(count));
+
+       
         UpdatePosition();
 	}
 
@@ -74,6 +87,9 @@ public class CameraController : MonoBehaviour
         if(Input.GetAxis("Mouse ScrollWheel") < -deadZone || Input.GetAxis("Mouse ScrollWheel") > deadZone)
         {
             desiredDistance = Mathf.Clamp(Distance - Input.GetAxis("Mouse ScrollWheel") * mouseWheelSensitivity, DistanceMin, DistanceMax);
+
+            preOccludedDistance = desiredDistance;
+            distanceSmooth = DistanceSmooth;
         }
 
     }
@@ -95,6 +111,96 @@ public class CameraController : MonoBehaviour
         return TargetLookAt.position + rotation * direction;
 
     }
+
+    bool CheckIfOccluded(int count)
+    {
+        var isOccluded = false;
+
+        var nearestDistance = CheckCameraPoints(TargetLookAt.position, desiredPosition);
+
+        if(nearestDistance != -1)
+        {
+            if (count < MaxOcclusionChecks)
+            {
+                isOccluded = true;
+                Distance -= OcclusionDistanceStep;
+
+                if (Distance < 0.25f)
+                    Distance = 0.25f;
+            }
+
+            else
+                Distance = nearestDistance - Camera.main.nearClipPlane;
+
+            desiredDistance = Distance;
+            distanceSmooth = DistanceResumeSmooth;
+        }
+
+        return isOccluded;
+    }
+
+
+    float CheckCameraPoints(Vector3 from, Vector3 to)
+    {
+        //If there is no collision then its -1. 
+        //Any value other than -1 indicates collision
+        var nearestDistance = -1f;
+
+        RaycastHit hitInfo;
+
+        //Take to point and calculate clip plane
+        Helper.ClipPlanePoints clipPlanePoints = Helper.ClipPlaneAtNear(to);
+
+        //Draw lines in the editor to make it easier to visualize
+        Debug.DrawLine(from, to + transform.forward * Camera.main.nearClipPlane, Color.red);
+        Debug.DrawLine(from, clipPlanePoints.UpperLeft);
+        Debug.DrawLine(from, clipPlanePoints.LowerLeft);
+        Debug.DrawLine(from, clipPlanePoints.UpperRight);
+        Debug.DrawLine(from, clipPlanePoints.LowerRight);
+
+        Debug.DrawLine(clipPlanePoints.UpperLeft, clipPlanePoints.UpperRight);
+        Debug.DrawLine(clipPlanePoints.UpperRight, clipPlanePoints.LowerRight);
+        Debug.DrawLine(clipPlanePoints.LowerRight, clipPlanePoints.LowerLeft);
+        Debug.DrawLine(clipPlanePoints.LowerLeft, clipPlanePoints.UpperLeft);
+
+        if (Physics.Linecast(from, clipPlanePoints.UpperLeft, out hitInfo) && hitInfo.collider.tag != "Player")
+            nearestDistance = hitInfo.distance;
+
+        if (Physics.Linecast(from, clipPlanePoints.LowerLeft, out hitInfo) && hitInfo.collider.tag != "Player")
+            if (hitInfo.distance < nearestDistance || nearestDistance == -1)
+                nearestDistance = hitInfo.distance;
+
+        if (Physics.Linecast(from, clipPlanePoints.UpperRight, out hitInfo) && hitInfo.collider.tag != "Player")
+            if (hitInfo.distance < nearestDistance || nearestDistance == -1)
+                nearestDistance = hitInfo.distance;
+
+        if (Physics.Linecast(from, clipPlanePoints.LowerRight, out hitInfo) && hitInfo.collider.tag != "Player")
+            if (hitInfo.distance < nearestDistance || nearestDistance == -1)
+                nearestDistance = hitInfo.distance;
+
+        if (Physics.Linecast(from, to + transform.forward * -Camera.main.nearClipPlane, out hitInfo) && hitInfo.collider.tag != "Player")
+            if (hitInfo.distance < nearestDistance || nearestDistance == -1)
+                nearestDistance = hitInfo.distance;
+
+        return nearestDistance;
+
+    }
+
+    void ResetDesiredDistance()
+    {
+        if(desiredDistance <preOccludedDistance)
+        {
+            var pos = CalculatePosition(mouseY, mouseX, preOccludedDistance);
+
+            var nearestDistance = CheckCameraPoints(TargetLookAt.position, pos);
+
+            if(nearestDistance == -1 || nearestDistance > preOccludedDistance)
+            {
+                desiredDistance = preOccludedDistance;
+            }
+
+        }
+    }
     void UpdatePosition()
     {
         var posX = Mathf.SmoothDamp(position.x, desiredPosition.x, ref velX, X_Smooth);
@@ -113,6 +219,7 @@ public class CameraController : MonoBehaviour
         mouseY = 10;
         Distance = startDistance;
         desiredDistance = Distance;
+        preOccludedDistance = Distance;
     }
 
     public static void UseExistingOrCreateNewMainCamera()

@@ -118,7 +118,7 @@ GameObject:
   - component: {fileID: 411388256}
   m_Layer: 0
   m_Name: targetLookAt
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -318,7 +318,7 @@ GameObject:
   - component: {fileID: 689203319}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -381,6 +381,7 @@ MonoBehaviour:
   ForwardSpeed: 10
   BackwardSpeed: 2
   StrafingSpeed: 5
+  SlideSpeed: 10
   JumpSpeed: 6
   Gravity: 21
   TerminalVelocity: 20
@@ -512,7 +513,7 @@ GameObject:
   - component: {fileID: 1724746793}
   m_Layer: 0
   m_Name: Cube
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -721,7 +722,7 @@ GameObject:
   - component: {fileID: 2095156516}
   m_Layer: 0
   m_Name: Sphere
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
