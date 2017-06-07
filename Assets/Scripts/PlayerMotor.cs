@@ -10,6 +10,7 @@ public class PlayerMotor : MonoBehaviour
     public float ForwardSpeed = 10f;
     public float BackwardSpeed = 2f;
     public float StrafingSpeed = 5f;
+    public float SlideSpeed = 10f;
     public float JumpSpeed = 6f;
     public float Gravity = 21f;
     public float TerminalVelocity = 20f;
@@ -146,6 +147,10 @@ public class PlayerMotor : MonoBehaviour
                 moveSpeed = BackwardSpeed;
                 break;
         }
+
+        if (slideDirection.magnitude > 0)
+            moveSpeed = SlideSpeed;
+
         return moveSpeed;
     }
 }
