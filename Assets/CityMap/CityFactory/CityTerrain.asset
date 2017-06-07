@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Name: CityTerrain
   m_EditorClassIdentifier: 
   _baseMaterial: {fileID: 2100000, guid: fdf26842f5143fe47802eb3f1c072614, type: 2}
-  _addCollider: 0
+  _addCollider: 1
   _addToLayer: 0
   _layerId: 0

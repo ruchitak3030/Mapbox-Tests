@@ -5,13 +5,20 @@ using UnityEngine;
 public class PlayerMotor : MonoBehaviour
 {
 
-    public static PlayerMotor instance;
-    public float moveSpeed = 10f;
-    public Vector3 moveVector { get; set; }
+    public static PlayerMotor Instance;
+
+    public float MoveSpeed = 10f;
+    public float JumpSpeed = 6f;
+    public float Gravity = 21f;
+    public float TerminalVelocity = 20f;
+
+
+    public Vector3 MoveVector { get; set; }
+    public float VerticalVelocity { get; set; }
     
 	void Awake ()
     {
-        instance = this;
+        Instance = this;
 	}
 	
 	
@@ -24,26 +31,44 @@ public class PlayerMotor : MonoBehaviour
     void ProcessMotion()
     {
         //Transform our moveVector into world space 
-        moveVector = transform.TransformDirection(moveVector);
+        MoveVector = transform.TransformDirection(MoveVector);
 
         //Normalize moveVector if magnitude > 1
-        if (moveVector.magnitude > 1)
-            moveVector = Vector3.Normalize(moveVector);
+        if (MoveVector.magnitude > 1)
+            MoveVector = Vector3.Normalize(MoveVector);
 
         //Multiply moveVector by moveSpeed
-        moveVector *= moveSpeed;
+        MoveVector *= MoveSpeed;
 
-        //multiply moveVector by deltaTime
-        moveVector *= Time.deltaTime;
+        //reapply vertical velocity to movevector.y
+        MoveVector = new Vector3(MoveVector.x, VerticalVelocity, MoveVector.z);
 
+        //Apply Gravity
+        ApplyGravity();
 
         //move Character in World Space
-        PlayerController.characterController.Move(moveVector);
+        PlayerController.CharacterController.Move(MoveVector*Time.deltaTime);
+    }
+
+
+    void ApplyGravity()
+    {
+        if (MoveVector.y > -TerminalVelocity)
+            MoveVector = new Vector3(MoveVector.x, MoveVector.y - Gravity * Time.deltaTime, MoveVector.z);
+
+        if (PlayerController.CharacterController.isGrounded && MoveVector.y < -1)
+            MoveVector = new Vector3(MoveVector.x, -1, MoveVector.z);
+    }
+
+    public void Jump()
+    {
+        if (PlayerController.CharacterController.isGrounded)
+            VerticalVelocity = JumpSpeed;
     }
 
     void SnapAlignCharacterCamera()
     {
-        if(moveVector.x!=0 || moveVector.z!=0)
+        if(MoveVector.x!=0 || MoveVector.z!=0)
         {
             transform.rotation = Quaternion.Euler(transform.eulerAngles.x, Camera.main.transform.eulerAngles.y, transform.eulerAngles.z);
         }

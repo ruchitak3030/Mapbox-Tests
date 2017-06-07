@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
-    public static CharacterController characterController;
-    public static PlayerController instance;
+    public static CharacterController CharacterController;
+    public static PlayerController Instance;
 
 	void Awake ()
     {
-        characterController = GetComponent<CharacterController>();
-        instance = this;
+        CharacterController = GetComponent<CharacterController>();
+        Instance = this;
         CameraController.UseExistingOrCreateNewMainCamera();
 	}
 	
@@ -22,20 +22,39 @@ public class PlayerController : MonoBehaviour {
             return;
 
         GetLocomotionInput();
+        HandleActionInput();
 
-        PlayerMotor.instance.UpdateMotor();
+        PlayerMotor.Instance.UpdateMotor();
 	}
 
     void GetLocomotionInput()
     {
         var deadZone = 0.1f;
-        PlayerMotor.instance.moveVector = Vector3.zero;
+
+        PlayerMotor.Instance.VerticalVelocity = PlayerMotor.Instance.MoveVector.y;
+        PlayerMotor.Instance.MoveVector = Vector3.zero;
 
         if (Input.GetAxis("Vertical") > deadZone || Input.GetAxis("Vertical") < -deadZone)
-            PlayerMotor.instance.moveVector += new Vector3(0, 0, Input.GetAxis("Vertical"));
+            PlayerMotor.Instance.MoveVector += new Vector3(0, 0, Input.GetAxis("Vertical"));
 
 
         if (Input.GetAxis("Horizontal") > deadZone || Input.GetAxis("Horizontal") < -deadZone)
-            PlayerMotor.instance.moveVector += new Vector3(Input.GetAxis("Horizontal"), 0, 0);
+            PlayerMotor.Instance.MoveVector += new Vector3(Input.GetAxis("Horizontal"), 0, 0);
+    }
+
+    void HandleActionInput()
+    {
+        //Default unity Jump button (Space)
+        if(Input.GetButton("Jump"))
+        {
+            //Calls PlayerController Jump function
+            Jump();
+        }
+    }
+
+    void Jump()
+    {
+        //Instructs the PlayerMotor to execute the Jump function where actual Jump functionality is defined
+        PlayerMotor.Instance.Jump();
     }
 }
