@@ -315,6 +315,7 @@ GameObject:
   - component: {fileID: 689203322}
   - component: {fileID: 689203324}
   - component: {fileID: 689203323}
+  - component: {fileID: 689203319}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -322,6 +323,17 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &689203319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 689203318}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 334fc196fe3143b4f858e5ff37dad121, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &689203321
 Transform:
   m_ObjectHideFlags: 0
@@ -366,10 +378,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 63c010366c4f64f4fbf09670ae4d0d2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MoveSpeed: 10
+  ForwardSpeed: 10
+  BackwardSpeed: 2
+  StrafingSpeed: 5
   JumpSpeed: 6
   Gravity: 21
   TerminalVelocity: 20
+  SlideThreshold: 0.6
+  MaxControllableSlideMagnitude: 0.4
 --- !u!114 &689203324
 MonoBehaviour:
   m_ObjectHideFlags: 0

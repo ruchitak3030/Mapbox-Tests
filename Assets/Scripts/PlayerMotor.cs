@@ -7,7 +7,9 @@ public class PlayerMotor : MonoBehaviour
 
     public static PlayerMotor Instance;
 
-    public float MoveSpeed = 10f;
+    public float ForwardSpeed = 10f;
+    public float BackwardSpeed = 2f;
+    public float StrafingSpeed = 5f;
     public float JumpSpeed = 6f;
     public float Gravity = 21f;
     public float TerminalVelocity = 20f;
@@ -44,7 +46,7 @@ public class PlayerMotor : MonoBehaviour
         ApplySlide();
 
         //Multiply moveVector by moveSpeed
-        MoveVector *= MoveSpeed;
+        MoveVector *= MoveSpeed();
 
         //reapply vertical velocity to movevector.y
         MoveVector = new Vector3(MoveVector.x, VerticalVelocity, MoveVector.z);
@@ -100,5 +102,50 @@ public class PlayerMotor : MonoBehaviour
         {
             transform.rotation = Quaternion.Euler(transform.eulerAngles.x, Camera.main.transform.eulerAngles.y, transform.eulerAngles.z);
         }
+    }
+
+    float MoveSpeed()
+    {
+        var moveSpeed = 0f;
+
+        switch(PlayerAnimator.Instance.MoveDirection)
+        {
+            case PlayerAnimator.Direction.Stationary:
+                moveSpeed = 0;
+                break;
+
+            case PlayerAnimator.Direction.Forward:
+                moveSpeed = ForwardSpeed;
+                break;
+
+            case PlayerAnimator.Direction.Backward:
+                moveSpeed = BackwardSpeed;
+                break;
+
+            case PlayerAnimator.Direction.Left:
+                moveSpeed = StrafingSpeed;
+                break;
+
+            case PlayerAnimator.Direction.Right:
+                moveSpeed = StrafingSpeed;
+                break;
+
+            case PlayerAnimator.Direction.LeftForward:
+                moveSpeed = ForwardSpeed;
+                break;
+
+            case PlayerAnimator.Direction.RightForward:
+                moveSpeed = ForwardSpeed;
+                break;
+
+            case PlayerAnimator.Direction.LeftBackward:
+                moveSpeed = BackwardSpeed;
+                break;
+
+            case PlayerAnimator.Direction.RightBackward:
+                moveSpeed = BackwardSpeed;
+                break;
+        }
+        return moveSpeed;
     }
 }

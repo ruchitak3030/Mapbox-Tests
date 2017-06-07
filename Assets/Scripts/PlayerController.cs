@@ -40,6 +40,8 @@ public class PlayerController : MonoBehaviour {
 
         if (Input.GetAxis("Horizontal") > deadZone || Input.GetAxis("Horizontal") < -deadZone)
             PlayerMotor.Instance.MoveVector += new Vector3(Input.GetAxis("Horizontal"), 0, 0);
+
+        PlayerAnimator.Instance.DetermineCurrentMoveDirection();
     }
 
     void HandleActionInput()
