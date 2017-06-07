@@ -11,7 +11,10 @@ public class PlayerMotor : MonoBehaviour
     public float JumpSpeed = 6f;
     public float Gravity = 21f;
     public float TerminalVelocity = 20f;
+    public float SlideThreshold = 0.6f;
+    public float MaxControllableSlideMagnitude = 0.4f;
 
+    private Vector3 slideDirection;
 
     public Vector3 MoveVector { get; set; }
     public float VerticalVelocity { get; set; }
@@ -37,6 +40,9 @@ public class PlayerMotor : MonoBehaviour
         if (MoveVector.magnitude > 1)
             MoveVector = Vector3.Normalize(MoveVector);
 
+        //Apply Slide if applicable
+        ApplySlide();
+
         //Multiply moveVector by moveSpeed
         MoveVector *= MoveSpeed;
 
@@ -58,6 +64,28 @@ public class PlayerMotor : MonoBehaviour
 
         if (PlayerController.CharacterController.isGrounded && MoveVector.y < -1)
             MoveVector = new Vector3(MoveVector.x, -1, MoveVector.z);
+    }
+
+
+    void ApplySlide()
+    {
+        //If Player is jumping or in air the return no slide
+        if (!PlayerController.CharacterController.isGrounded)
+            return;
+
+        slideDirection = Vector3.zero;
+        RaycastHit hitInfo;
+
+        if(Physics.Raycast(transform.position+Vector3.up,Vector3.down,out hitInfo))
+        {
+            if (hitInfo.normal.y < SlideThreshold)
+                slideDirection = new Vector3(hitInfo.normal.x, -hitInfo.normal.y, hitInfo.normal.z);
+        }
+
+        if (slideDirection.magnitude < MaxControllableSlideMagnitude)
+            MoveVector += slideDirection;
+        else
+            MoveVector = slideDirection;
     }
 
     public void Jump()
