@@ -24,6 +24,7 @@ public static class Helper
         return Mathf.Clamp(angle, min, max);
     }
 
+    
     public static ClipPlanePoints ClipPlaneAtNear(Vector3 pos)
     {
         var clipPlanePoints = new ClipPlanePoints();
@@ -39,7 +40,6 @@ public static class Helper
         var width = height * aspect;
 
         //LOWER RIGHT
-
         //Move our point to right from position by width
         clipPlanePoints.LowerRight = pos + transform.right * width;
 
@@ -49,9 +49,7 @@ public static class Helper
         //Ensures that we are moving forward relative to camera
         clipPlanePoints.LowerRight += transform.forward * distance;
 
-
         //LOWER LEFT
-
         //Move our point to left from position by width
         clipPlanePoints.LowerLeft = pos - transform.right * width;
 
@@ -62,7 +60,6 @@ public static class Helper
         clipPlanePoints.LowerLeft += transform.forward * distance;
 
         //UPPER RIGHT
-
         //Move our point to right from position by width
         clipPlanePoints.UpperRight = pos + transform.right * width;
 
@@ -73,7 +70,6 @@ public static class Helper
         clipPlanePoints.UpperRight += transform.forward * distance;
 
         //UPPER LEFT
-
         //Move our point to left from position by width
         clipPlanePoints.UpperLeft = pos - transform.right * width;
 
@@ -82,6 +78,7 @@ public static class Helper
 
         //Ensures that we are moving forward relative to camera
         clipPlanePoints.UpperLeft += transform.forward * distance;
+
 
         return clipPlanePoints;
     }

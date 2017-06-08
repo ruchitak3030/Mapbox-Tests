@@ -13,7 +13,6 @@ public class CameraController : MonoBehaviour
     public float DistanceMax = 10f;
     public float DistanceSmooth = 0.05f;
     public float DistanceResumeSmooth = 1f;
-
     public float x_MouseSensitivity = 5f;
     public float y_MouseSensitivity = 5f;
     public float mouseWheelSensitivity = 5f;
@@ -31,26 +30,27 @@ public class CameraController : MonoBehaviour
     private float velY = 0f;
     private float velZ = 0f;
     private float velDistance = 0f;
-    private float startDistance = 0f; 
+    private float startDistance = 0f;
     private float desiredDistance = 0f;
     private Vector3 position = Vector3.zero;
     private Vector3 desiredPosition = Vector3.zero;
     private float distanceSmooth = 0f;
     private float preOccludedDistance = 0;
-	
-	void Awake()
+
+
+    void Awake()
     {
         instance = this;
-	}
-	
-	void Start()
+    }
+
+    void Start()
     {
         Distance = Mathf.Clamp(Distance, DistanceMin, DistanceMax);
         startDistance = Distance;
         Reset();
     }
 
-	void LateUpdate ()
+    void LateUpdate()
     {
         if (TargetLookAt == null)
             return;
@@ -62,11 +62,12 @@ public class CameraController : MonoBehaviour
         {
             CalculateDesiredPosition();
             count++;
+
         } while (CheckIfOccluded(count));
 
-       
+
         UpdatePosition();
-	}
+    }
 
     void HandlePlayerInput()
     {
@@ -74,7 +75,7 @@ public class CameraController : MonoBehaviour
         var deadZone = 0.01f;
 
         //check if Right mouse button is down
-        if(Input.GetMouseButton(1))
+        if (Input.GetMouseButton(1))
         {
             mouseX += Input.GetAxis("Mouse X") * x_MouseSensitivity;
             mouseY -= Input.GetAxis("Mouse Y") * y_MouseSensitivity;
@@ -84,7 +85,7 @@ public class CameraController : MonoBehaviour
         //Limit mouse Y rotation
         mouseY = Helper.ClampAngle(mouseY, y_minLimit, y_maxLimit);
 
-        if(Input.GetAxis("Mouse ScrollWheel") < -deadZone || Input.GetAxis("Mouse ScrollWheel") > deadZone)
+        if (Input.GetAxis("Mouse ScrollWheel") < -deadZone || Input.GetAxis("Mouse ScrollWheel") > deadZone)
         {
             desiredDistance = Mathf.Clamp(Distance - Input.GetAxis("Mouse ScrollWheel") * mouseWheelSensitivity, DistanceMin, DistanceMax);
 
@@ -96,8 +97,10 @@ public class CameraController : MonoBehaviour
 
     void CalculateDesiredPosition()
     {
+        ResetDesiredDistance();
+
         //Evaluate distance
-        Distance = Mathf.SmoothDamp(Distance, desiredDistance, ref velDistance, DistanceSmooth);
+        Distance = Mathf.SmoothDamp(Distance, desiredDistance, ref velDistance, distanceSmooth);
 
 
         //Calculate desired position
@@ -112,13 +115,14 @@ public class CameraController : MonoBehaviour
 
     }
 
+
     bool CheckIfOccluded(int count)
     {
         var isOccluded = false;
 
         var nearestDistance = CheckCameraPoints(TargetLookAt.position, desiredPosition);
 
-        if(nearestDistance != -1)
+        if (nearestDistance != -1)
         {
             if (count < MaxOcclusionChecks)
             {
@@ -139,12 +143,12 @@ public class CameraController : MonoBehaviour
         return isOccluded;
     }
 
-
     float CheckCameraPoints(Vector3 from, Vector3 to)
     {
+        var nearestDistance = -1f;
+
         //If there is no collision then its -1. 
         //Any value other than -1 indicates collision
-        var nearestDistance = -1f;
 
         RaycastHit hitInfo;
 
@@ -152,7 +156,7 @@ public class CameraController : MonoBehaviour
         Helper.ClipPlanePoints clipPlanePoints = Helper.ClipPlaneAtNear(to);
 
         //Draw lines in the editor to make it easier to visualize
-        Debug.DrawLine(from, to + transform.forward * Camera.main.nearClipPlane, Color.red);
+        Debug.DrawLine(from, to + transform.forward * -Camera.main.nearClipPlane, Color.red);
         Debug.DrawLine(from, clipPlanePoints.UpperLeft);
         Debug.DrawLine(from, clipPlanePoints.LowerLeft);
         Debug.DrawLine(from, clipPlanePoints.UpperRight);
@@ -165,6 +169,7 @@ public class CameraController : MonoBehaviour
 
         if (Physics.Linecast(from, clipPlanePoints.UpperLeft, out hitInfo) && hitInfo.collider.tag != "Player")
             nearestDistance = hitInfo.distance;
+
 
         if (Physics.Linecast(from, clipPlanePoints.LowerLeft, out hitInfo) && hitInfo.collider.tag != "Player")
             if (hitInfo.distance < nearestDistance || nearestDistance == -1)
@@ -183,22 +188,20 @@ public class CameraController : MonoBehaviour
                 nearestDistance = hitInfo.distance;
 
         return nearestDistance;
-
     }
 
     void ResetDesiredDistance()
     {
-        if(desiredDistance <preOccludedDistance)
+        if (desiredDistance < preOccludedDistance)
         {
             var pos = CalculatePosition(mouseY, mouseX, preOccludedDistance);
 
             var nearestDistance = CheckCameraPoints(TargetLookAt.position, pos);
 
-            if(nearestDistance == -1 || nearestDistance > preOccludedDistance)
+            if (nearestDistance == -1 || nearestDistance > preOccludedDistance)
             {
                 desiredDistance = preOccludedDistance;
             }
-
         }
     }
     void UpdatePosition()
@@ -229,11 +232,11 @@ public class CameraController : MonoBehaviour
         CameraController myCamera;
 
         //if camera already exists
-        if(Camera.main !=null)
+        if (Camera.main != null)
         {
             tempCamera = Camera.main.gameObject;
         }
-        
+
         //if not then create new
         else
         {
@@ -249,7 +252,7 @@ public class CameraController : MonoBehaviour
         //Find local target look at
         targetLookAt = GameObject.Find("targetLookAt") as GameObject;
 
-        if(targetLookAt == null)
+        if (targetLookAt == null)
         {
             targetLookAt = new GameObject("targetLookAt");
             targetLookAt.transform.position = Vector3.zero;
