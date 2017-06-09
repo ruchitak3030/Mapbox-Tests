@@ -9,13 +9,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d86f7dc89b3e33408563e4ada9d1c74, type: 3}
-  m_Name: CityAltBuildingTextureMod
+  m_Name: CityHouseTextureMod
   m_EditorClassIdentifier: 
   Active: 1
   _textureTop: 1
   _useSatelliteTexture: 0
   _topMaterials:
-  - {fileID: 2100000, guid: 8403131cbac7ff94b9052e03e29b30c9, type: 2}
+  - {fileID: 2100000, guid: ceab2aa7f0cbebc4dad6b2bd772ab303, type: 2}
   _textureSides: 1
   _sideMaterials:
-  - {fileID: 2100000, guid: 8403131cbac7ff94b9052e03e29b30c9, type: 2}
+  - {fileID: 2100000, guid: ceab2aa7f0cbebc4dad6b2bd772ab303, type: 2}

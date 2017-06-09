@@ -18,5 +18,21 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 929e0c491f48d474b8edd03e7025aaed, type: 2}
   _defaultStack: {fileID: 11400000, guid: d4bc45d2bde38f849a3f8d91b4756562, type: 2}
   Stacks:
-  - Type: residential, church
+  - Type: vacancy
     Stack: {fileID: 11400000, guid: c598be19e36966f4ba431558bc985ba8, type: 2}
+  - Type: parking
+    Stack: {fileID: 11400000, guid: 83f103d1600904e4ea58e2114966e9ca, type: 2}
+  - Type: church,place_of_worship
+    Stack: {fileID: 11400000, guid: 05e7b63d3acdb5941abbda5114b91617, type: 2}
+  - Type: pharmacy,childcare, fire_station, police
+    Stack: {fileID: 11400000, guid: 6b574fdcf37cfc4478daaf98dd1eebec, type: 2}
+  - Type: station,bus_station,garage
+    Stack: {fileID: 11400000, guid: e861f1102888d334eb0a1a2b57dd576d, type: 2}
+  - Type: university, library,public, stadium
+    Stack: {fileID: 11400000, guid: 6af272c82fa29814290a8465dd239354, type: 2}
+  - Type: retail,commercial,townhall,gazebo,shed,restaurant,cafe,dormitory
+    Stack: {fileID: 11400000, guid: 2b17bc24d260a9d43ace945142bfe5d3, type: 2}
+  - Type: residential,house,apartments
+    Stack: {fileID: 11400000, guid: 4492b8bff67603c41872e635c5d2d3dc, type: 2}
+  - Type: bank, prison, civic,courthouse
+    Stack: {fileID: 11400000, guid: ddc4d48e0c42e87429683fb2d5ecec44, type: 2}

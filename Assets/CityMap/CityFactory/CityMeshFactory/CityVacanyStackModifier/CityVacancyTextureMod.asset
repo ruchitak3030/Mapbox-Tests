@@ -9,13 +9,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7d86f7dc89b3e33408563e4ada9d1c74, type: 3}
-  m_Name: CityRoadTextureMod
+  m_Name: CityVacancyTextureMod
   m_EditorClassIdentifier: 
   Active: 1
   _textureTop: 1
   _useSatelliteTexture: 0
   _topMaterials:
-  - {fileID: 2100000, guid: 93beb791ecd90d7478a9fa7581a564e0, type: 2}
-  _textureSides: 0
+  - {fileID: 2100000, guid: 243591d3bbf1877438c1de39e2989424, type: 2}
+  _textureSides: 1
   _sideMaterials:
-  - {fileID: 2100000, guid: 93beb791ecd90d7478a9fa7581a564e0, type: 2}
+  - {fileID: 2100000, guid: 243591d3bbf1877438c1de39e2989424, type: 2}
