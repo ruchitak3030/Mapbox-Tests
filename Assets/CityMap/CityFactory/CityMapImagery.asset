@@ -13,7 +13,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _mapIdType: 0
   _customMapId: mapbox://styles/ruchita3011/cj3kieplh00132snvko7ig5b3
-  _mapId: mapbox://styles/mapbox/dark-v9
+  _mapId: mapbox://styles/mapbox/streets-v10
   _useCompression: 1
   _useMipMap: 0
   _useRetina: 0
